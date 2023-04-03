@@ -47,13 +47,13 @@ def getRadiusParams(ros_points):
 	
 	
 def filterVal(value, fil_in, fil_out, fil_gain):
-	
+	#set the filter in value to the current value being passed thru
 	fil_in = value
 	print('fil_in', fil_in, ' fil_out now:', fil_out)
-			
+	#get filtered value by using equation for first order low pass filter	
 	fil_out = fil_gain*fil_in + (1-fil_gain)*fil_out
 	print('fil_out_next: ', fil_out)
-	
+	#return the filtered point
 	return(fil_out)
 	
 		
