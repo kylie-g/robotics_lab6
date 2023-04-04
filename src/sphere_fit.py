@@ -46,14 +46,14 @@ def getRadiusParams(ros_points):
 	return sphParams
 	
 	
-def filterVal(value, fil_in, fil_out, fil_gain):
-	#set the filter in value to the current value being passed thru
+def filterVal(value, fil_out, fil_gain):
+	
 	fil_in = value
 	print('fil_in', fil_in, ' fil_out now:', fil_out)
-	#get filtered value by using equation for first order low pass filter	
-	fil_out = fil_gain*fil_in + (1-fil_gain)*fil_out
+			
+	fil_out = (fil_gain*fil_in) + (1-fil_gain)*fil_out
 	print('fil_out_next: ', fil_out)
-	#return the filtered point
+	
 	return(fil_out)
 	
 		
@@ -69,6 +69,10 @@ if __name__ == '__main__':
 	# set the loop frequency
 	rate = rospy.Rate(10)
 	
+	x_fil_out =  -0.015
+	y_fil_out =  -0.015
+	z_fil_out =  0.47
+	rad_fil_out = 0.04
 	
 	while not rospy.is_shutdown():
 		# make sure we process if the camera has started streaming images
@@ -77,9 +81,10 @@ if __name__ == '__main__':
 			param = getRadiusParams(ros_points)
 			
 			#filter params
-			param.xc = filterVal(param.xc, 0.0, -0.01, 0.3)
-			param.yc = filterVal(param.yc, 0.0, -0.02, 0.3)
-			param.zc = filterVal(param.zc, 0.0, 0.47, 0.3)
+			param.xc = filterVal(param.xc, x_fil_out, 0.05*10)
+			param.yc = filterVal(param.yc, y_fil_out, 0.05*10)
+			param.zc = filterVal(param.zc, z_fil_out, 0.05*10)
+			param.radius = filterVal(param.radius, rad_fil_out, 0.05*10)
 			
 			# publish the param
 			pnt_pub.publish(param)
