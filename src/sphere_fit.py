@@ -81,10 +81,14 @@ if __name__ == '__main__':
 			param = getRadiusParams(ros_points)
 			
 			#filter params
-			param.xc = filterVal(param.xc, x_fil_out, 0.05*10)
-			param.yc = filterVal(param.yc, y_fil_out, 0.05*10)
-			param.zc = filterVal(param.zc, z_fil_out, 0.05*10)
-			param.radius = filterVal(param.radius, rad_fil_out, 0.05*10)
+			param.xc = filterVal(param.xc, x_fil_out, 0.05)
+			x_fil_out = param.xc
+			param.yc = filterVal(param.yc, y_fil_out, 0.05)
+			y_fil_out = param.yc
+			param.zc = filterVal(param.zc, z_fil_out, 0.05)
+			z_fil_out = param.zc
+			param.radius = filterVal(param.radius, rad_fil_out, 0.05*5)
+			rad_fil_out = param.radius
 			
 			# publish the param
 			pnt_pub.publish(param)
